@@ -1,0 +1,27 @@
+RewriteEngine On
+Options -Indexes
+
+# Clean admin URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(admin|society_admin)/([a-zA-Z0-9_-]+)$ $1/$2.php [QSA,L]
+
+# API routing
+RewriteRule ^api/v1/(.*)$ api/v1/router.php [QSA,L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+</IfModule>
+
+# Block sensitive files
+RewriteRule ^include/ - [F,L]
+
+<FilesMatch "^(api_config|dbconfig|security|helpers)\.php$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "\.sql$">
+    Require all denied
+</FilesMatch>

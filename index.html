@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securis - Smart Society Management Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #e0e0e0;
+            --text-muted: #8892b0;
+            --white: #ffffff;
+            --bg-light: #f8f9fc;
+            --card-bg: #ffffff;
+            --gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ─── Navbar ─── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            padding: 0.7rem 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .nav-brand i { color: var(--highlight); font-size: 1.6rem; }
+
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--white); }
+
+        .nav-cta {
+            background: var(--highlight) !important;
+            color: var(--white) !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: transform 0.2s, box-shadow 0.2s !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            background: var(--gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(15,52,96,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(233, 69, 96, 0.15);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            color: var(--highlight);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero h1 span { color: var(--highlight); }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--highlight);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(233, 69, 96, 0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--white);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-stat h3 {
+            font-size: 2rem;
+            color: var(--white);
+            font-weight: 800;
+        }
+
+        .hero-stat p { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* ─── Section Commons ─── */
+        section { padding: 5rem 2rem; }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--highlight);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .section-header p { color: #64748b; font-size: 1.05rem; }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* ─── Features ─── */
+        #features { background: var(--bg-light); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid #e8ecf1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            border-color: transparent;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .feature-card p { color: #64748b; font-size: 0.9rem; line-height: 1.6; }
+
+        /* ─── How It Works ─── */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--highlight), var(--accent));
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-num {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin: 0 auto 1.2rem;
+            border: 4px solid var(--bg-light);
+            box-shadow: 0 4px 15px rgba(26, 26, 46, 0.2);
+        }
+
+        .step h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.4rem; }
+        .step p { color: #64748b; font-size: 0.85rem; }
+
+        /* ─── App Download ─── */
+        #app {
+            background: var(--gradient);
+            color: var(--white);
+        }
+
+        .app-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+        }
+
+        .app-text { flex: 1; }
+
+        .app-text .section-tag { color: rgba(233,69,96,0.8); }
+
+        .app-text h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .app-text p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.7; }
+
+        .app-features-list { list-style: none; margin-bottom: 2rem; }
+
+        .app-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 0;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .app-features-list li i {
+            color: var(--highlight);
+            font-size: 0.8rem;
+            width: 20px;
+        }
+
+        .app-visual {
+            flex: 0 0 320px;
+            text-align: center;
+        }
+
+        .phone-mockup {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 32px;
+            padding: 1.5rem;
+            width: 260px;
+            margin: 0 auto;
+        }
+
+        .phone-screen {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .phone-screen i { font-size: 3rem; color: var(--highlight); margin-bottom: 1rem; }
+        .phone-screen h4 { font-size: 1rem; color: var(--white); margin-bottom: 0.3rem; }
+        .phone-screen p { font-size: 0.75rem; color: var(--text-muted); }
+
+        .download-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 1.5rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .download-btn i { font-size: 1.5rem; }
+        .download-btn .dl-label { font-size: 0.65rem; color: var(--text-muted); }
+        .download-btn .dl-store { font-size: 0.95rem; font-weight: 600; }
+
+        /* ─── Tech Stack ─── */
+        #tech { background: var(--bg-light); }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .tech-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 1.8rem;
+            text-align: center;
+            border: 1px solid #e8ecf1;
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+
+        .tech-card i {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .tech-card h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.3rem; }
+        .tech-card p { font-size: 0.8rem; color: #64748b; }
+
+        /* ─── Footer ─── */
+        footer {
+            background: var(--primary);
+            color: var(--text);
+            padding: 3rem 2rem 1.5rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .footer-brand h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand h3 i { color: var(--highlight); margin-right: 0.4rem; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.85rem; max-width: 280px; }
+
+        .footer-links h4 {
+            color: var(--white);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .footer-links a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.2rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom p { color: var(--text-muted); font-size: 0.8rem; }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 991px) {
+            .hero h1 { font-size: 2.5rem; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps { grid-template-columns: repeat(2, 1fr); }
+            .steps::before { display: none; }
+            .app-content { flex-direction: column; text-align: center; }
+            .app-features-list li { justify-content: center; }
+            .download-buttons { justify-content: center; }
+            .tech-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav-links { display: none; }
+            .mobile-toggle { display: block; }
+        }
+
+        @media (max-width: 575px) {
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .steps { grid-template-columns: 1fr; }
+            .tech-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-content { flex-direction: column; }
+            .app-visual { flex: 0 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="nav-brand">
+        <i class="fas fa-shield-halved"></i>
+        Securis
+    </a>
+    <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#app">Mobile App</a>
+        <a href="#tech">Tech Stack</a>
+        <a href="admin/" class="nav-cta">Admin Panel</a>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+    </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-bolt"></i>
+            Next-Gen Society Management
+        </div>
+        <h1>Smart Access.<br><span>Smarter Living.</span></h1>
+        <p>Securis is a complete smart society management platform with IoT-powered door locks, real-time visitor tracking, and seamless resident management for modern housing societies.</p>
+        <div class="hero-buttons">
+            <a href="#features" class="btn btn-primary">
+                <i class="fas fa-rocket"></i> Explore Features
+            </a>
+            <a href="#app" class="btn btn-outline">
+                <i class="fas fa-mobile-screen-button"></i> Get the App
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <h3><i class="fas fa-lock" style="font-size:1.5rem;color:var(--highlight)"></i></h3>
+                <p>Smart Locks</p>
+            </div>
+            <div class="hero-stat">
+                <h3><i class="fas fa-shield-halved" style="font-size:1.5rem;color:var(--highlight)"></i></h3>
+                <p>Secure Access</p>
+            </div>
+            <div class="hero-stat">
+                <h3><i class="fas fa-cloud" style="font-size:1.5rem;color:var(--highlight)"></i></h3>
+                <p>Cloud Powered</p>
+            </div>
+            <div class="hero-stat">
+                <h3><i class="fas fa-mobile" style="font-size:1.5rem;color:var(--highlight)"></i></h3>
+                <p>Mobile First</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Features</div>
+            <h2>Everything Your Society Needs</h2>
+            <p>A comprehensive platform to manage access, residents, visitors, and more with a single solution.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(233,69,96,0.1);color:#e94560;">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Smart Door Locks</h3>
+                <p>IoT-enabled smart locks with remote access control. Lock and unlock doors from your phone, generate temporary access codes for guests.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(37,99,235,0.1);color:#2563eb;">
+                    <i class="fas fa-id-card-clip"></i>
+                </div>
+                <h3>Visitor Management</h3>
+                <p>Pre-approve visitors, generate QR-based entry passes, and track every entry and exit in real-time with photo verification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(16,185,129,0.1);color:#10b981;">
+                    <i class="fas fa-users-gear"></i>
+                </div>
+                <h3>Resident Management</h3>
+                <p>Manage resident profiles, flat assignments, family members, and move-in/move-out workflows with approval processes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b;">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3>Society & Tower Setup</h3>
+                <p>Multi-society support with towers, floors, and flats. Configurable flat types (1BHK, 2BHK, 3BHK) and ownership tracking.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:#8b5cf6;">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Admin Dashboard</h3>
+                <p>Real-time analytics with society stats, resident counts, subscription tracking, and revenue reports at your fingertips.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(6,182,212,0.1);color:#06b6d4;">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>Notifications & Alerts</h3>
+                <p>Push notifications for visitor arrivals, access events, maintenance requests, and important society announcements.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Process</div>
+            <h2>How It Works</h2>
+            <p>Get your society up and running in four simple steps.</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Register Society</h3>
+                <p>Add your society with towers, floors, and flat configurations.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Onboard Residents</h3>
+                <p>Invite residents to join via the mobile app with flat assignment.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Install Smart Locks</h3>
+                <p>Set up IoT smart locks on entry points and flat doors.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <h3>Go Live</h3>
+                <p>Start managing access, visitors, and daily operations seamlessly.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mobile App -->
+<section id="app">
+    <div class="container">
+        <div class="app-content">
+            <div class="app-text">
+                <div class="section-tag">Mobile App</div>
+                <h2>Control Your Home<br>From Anywhere</h2>
+                <p>The Securis mobile app puts full control in residents' hands. Manage smart locks, approve visitors, and stay connected with your society.</p>
+                <ul class="app-features-list">
+                    <li><i class="fas fa-check-circle"></i> One-tap door unlock with smart lock integration</li>
+                    <li><i class="fas fa-check-circle"></i> Generate QR codes for visitor pre-approval</li>
+                    <li><i class="fas fa-check-circle"></i> Real-time notifications for access events</li>
+                    <li><i class="fas fa-check-circle"></i> View and manage family members in your flat</li>
+                    <li><i class="fas fa-check-circle"></i> Society admin tools for committee members</li>
+                </ul>
+                <div class="download-buttons">
+                    <a href="#" class="download-btn">
+                        <i class="fab fa-google-play"></i>
+                        <div>
+                            <div class="dl-label">GET IT ON</div>
+                            <div class="dl-store">Google Play</div>
+                        </div>
+                    </a>
+                    <a href="#" class="download-btn">
+                        <i class="fab fa-apple"></i>
+                        <div>
+                            <div class="dl-label">DOWNLOAD ON</div>
+                            <div class="dl-store">App Store</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="app-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <i class="fas fa-shield-halved"></i>
+                        <h4>Securis</h4>
+                        <p>Smart Society Management</p>
+                        <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.6rem;">
+                            <div style="background:rgba(233,69,96,0.15);padding:0.6rem;border-radius:10px;font-size:0.8rem;color:var(--text);">
+                                <i class="fas fa-lock-open" style="color:var(--highlight);margin-right:0.4rem;"></i> Unlock Door
+                            </div>
+                            <div style="background:rgba(255,255,255,0.05);padding:0.6rem;border-radius:10px;font-size:0.8rem;color:var(--text);">
+                                <i class="fas fa-qrcode" style="color:#2563eb;margin-right:0.4rem;"></i> Visitor Pass
+                            </div>
+                            <div style="background:rgba(255,255,255,0.05);padding:0.6rem;border-radius:10px;font-size:0.8rem;color:var(--text);">
+                                <i class="fas fa-bell" style="color:#f59e0b;margin-right:0.4rem;"></i> Notifications
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack -->
+<section id="tech">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Technology</div>
+            <h2>Built With Modern Tech</h2>
+            <p>Enterprise-grade technology stack for reliability and performance.</p>
+        </div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <i class="fab fa-flutter" style="color:#02569B;"></i>
+                <h3>Flutter</h3>
+                <p>Cross-platform mobile app</p>
+            </div>
+            <div class="tech-card">
+                <i class="fab fa-php" style="color:#777BB4;"></i>
+                <h3>PHP REST API</h3>
+                <p>Robust backend services</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-database" style="color:#00758F;"></i>
+                <h3>MySQL</h3>
+                <p>Reliable data storage</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-microchip" style="color:#e94560;"></i>
+                <h3>IoT Integration</h3>
+                <p>Smart lock connectivity</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-brand">
+            <h3><i class="fas fa-shield-halved"></i> Securis</h3>
+            <p>Smart society management platform with IoT-powered access control for modern housing societies.</p>
+        </div>
+        <div class="footer-links">
+            <h4>Platform</h4>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#app">Mobile App</a>
+            <a href="#tech">Tech Stack</a>
+        </div>
+        <div class="footer-links">
+            <h4>Access</h4>
+            <a href="admin/">Admin Panel</a>
+            <a href="#">Society Admin</a>
+            <a href="#">API Docs</a>
+        </div>
+        <div class="footer-links">
+            <h4>Company</h4>
+            <a href="#">About XRDA3</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Securis by XRDA3. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', function() {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile menu toggle
+document.getElementById('mobileToggle').addEventListener('click', function() {
+    var nav = document.getElementById('navLinks');
+    if (nav.style.display === 'flex') {
+        nav.style.display = 'none';
+    } else {
+        nav.style.display = 'flex';
+        nav.style.flexDirection = 'column';
+        nav.style.position = 'absolute';
+        nav.style.top = '100%';
+        nav.style.left = '0';
+        nav.style.right = '0';
+        nav.style.background = 'rgba(26,26,46,0.98)';
+        nav.style.padding = '1rem 2rem 1.5rem';
+        nav.style.borderRadius = '0 0 16px 16px';
+        nav.style.gap = '1rem';
+    }
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            var nav = document.getElementById('navLinks');
+            if (window.innerWidth < 992) nav.style.display = 'none';
+        }
+    });
+});
+</script>
+
+</body>
+</html>
