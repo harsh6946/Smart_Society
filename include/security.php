@@ -3,7 +3,7 @@
 
 function generateToken($length = 64) {
     return bin2hex(random_bytes($length / 2));
-}
+}   
 
 function generatePinCode($length = 6) {
     return str_pad(random_int(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);

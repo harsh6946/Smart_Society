@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_error'] = 'Invalid role.';
         } else {
             $checkStmt = $conn->prepare("SELECT id FROM tbl_admin WHERE email = ?");
-            $checkStmt->bind_param('s', $email);
+            $checkStmt->bind_param('s', $email);    // it binds email as string 
             $checkStmt->execute();
             if ($checkStmt->get_result()->num_rows > 0) {
                 $_SESSION['flash_error'] = 'An admin with this email already exists.';
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $socIdVal = $societyId > 0 ? $societyId : null;
                 $stmt = $conn->prepare("INSERT INTO tbl_admin (name, email, password_hash, role, society_id, phone, status) VALUES (?, ?, ?, ?, ?, ?, 'active')");
                 $stmt->bind_param('ssssis', $name, $email, $hashedPassword, $role, $socIdVal, $phone);
-                if ($stmt->execute()) {
+                if ($stmt->execute()) {      // this checks if admin has inserted successfully if yes run code if no go to else
                     $newId = $stmt->insert_id;
                     $logStmt = $conn->prepare("INSERT INTO tbl_audit_log (admin_id, action, entity_type, entity_id, ip_address, details) VALUES (?, 'create_admin', 'admin', ?, ?, ?)");
                     $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
